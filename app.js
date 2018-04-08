@@ -22,8 +22,7 @@ server.listen(process.env.port || process.env.PORT || 3978, function () {
 });
 
 
-const apiToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBBNDU1OTA5OTQwQjJGQTQ5OEJGNTgyMzhBNkU3N0Y0MTFGM0NEOTIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJDa1ZaQ1pRTEw2U1l2MWdqaW01MzlCSHp6WkkifQ.eyJuYmYiOjE1MjMxNjk0ODMsImV4cCI6MTUyMzE3MzA4MywiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6ImQ0MmM4NDA1LTQ3YjgtNGUyOS1hZTczLTkyNjRiMzgwMjMyNiIsImNsaWVudF90ZW5hbnQiOiJkOTBlMjNiZi1jOWM1LTQzMjEtODAyNS0xNDNhNGFhYzBhNjQiLCJqdGkiOiI1NzI2ZWE3ZmY5NTliYzBlNWY2YmM1ZmFmNmY3ZDRhMCIsInNjb3BlIjpbInRyYW5zcG9ydGFwaTphbGwiXX0.eGHHG1RVh0jAgeprINPFnSFcFiaVFhIM0iuhMMxPGrucAMRzkwz8XlP9gyMUM9VCRWIzLjgZDFLvdrkND43ALDrdYc11oY-ntodqLgiPcel0lU36XNZXQF_SJcOCEYfO-7ZDiMhKLeQoC0Pq9qzAz3B2gJIqKlDrzBR9eFUSnh7sTTjGDPoHjIwONYSryl1BAa68ysjEU6YV_BaC48CHd6UXU-IWutcXkWSIKpXjyM4hd8qu5cElCqd4N__qup2NvrWDxVR65dK5PBYj6qEMSXC82t7pTK5DbIhyq9swz-1Klj73y_jedk3zBADJkcOGnJn_J3U7R3klt8rTQMMETg"
-
+const apiToken = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBBNDU1OTA5OTQwQjJGQTQ5OEJGNTgyMzhBNkU3N0Y0MTFGM0NEOTIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJDa1ZaQ1pRTEw2U1l2MWdqaW01MzlCSHp6WkkifQ.eyJuYmYiOjE1MjMxNzI0MzAsImV4cCI6MTUyMzE3NjAzMCwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6ImQ0MmM4NDA1LTQ3YjgtNGUyOS1hZTczLTkyNjRiMzgwMjMyNiIsImNsaWVudF90ZW5hbnQiOiJkOTBlMjNiZi1jOWM1LTQzMjEtODAyNS0xNDNhNGFhYzBhNjQiLCJqdGkiOiI4NmM3NzkyMDNlZDVjMTEwY2U3Nzk4NDNlZWUwNjNmZiIsInNjb3BlIjpbInRyYW5zcG9ydGFwaTphbGwiXX0.IA6LN2wdhCIyD7mcKHSMrUs1PJqLHv0_P2tsKSxnacZDUi4O1Rdt2lNCWFp3yZTu2l-AjussrGaVhI19ZKHGsp_NBdkvUbZb4lmUn27qLafFkEXVVcVYxTfsVDvFi8NYjcYWJAJIorWIUZNXzLqKz0DLdE1DHx5041QKNCfM4fvkw-V4iTZGm0GKnhrfQ1BkoWNcu9uQt3O3qxxbeoTmir4oHLSrJ4gnyQhx-XpRfSDAuoV7WhMYcfwlnT6avoP2RJC27G4PVO0BYpKDA0uF-b1kV31BotjTibaO6_8L2de2vAAn93lfB4rpJ61ROnBB7TPXYyhEINmkqt2fDWIj1w"
 const getCoordinates = async (location) => {
   return await geocoder.geocode(location)
 }
@@ -129,18 +128,32 @@ bot.dialog('route', [
           }
         }
       })
-      console.log(response.data)
 
-      response.data.itineraries[0].legs.forEach(leg => {
-        if(leg.type === 'Walking') {
-          leg.directions.forEach(walk => {
-            session.send(`${walk.instruction}`)
-          })
-        }
-        if(leg.type === 'Transit') {
-            session.send(`Take a bus to ${leg.vehicle.headsign}`)
-        }
-      })
+      const itineraries = response.data.itineraries
+      let counter = 0
+
+      if(itineraries.length > 0) {
+        itineraries.forEach(itinerary => {
+          counter  = counter + 1
+          let routes = ''
+          const legs = itinerary.legs
+          if(legs.length > 0) {
+            legs.forEach(leg => {
+              console.log(counter)
+              if(leg.type === 'Walking') {
+                leg.directions.forEach(walk => {
+                  routes = routes + `${walk.instruction}\n`
+                })
+              }
+              if(leg.type === 'Transit') {
+                  routes = routes + `Take a bus to ${leg.vehicle.headsign}\n`
+              }
+            })
+          }
+          const result = `Option ${counter}\n${routes}`
+          session.send(result)
+        })
+      }
     } catch (error) {
       console.log(error.data)
     }
