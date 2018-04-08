@@ -1,3 +1,4 @@
+var axios = require('axios')
 var restify = require('restify');
 var builder = require('botbuilder');
 
@@ -19,40 +20,58 @@ server.post('/api/messages', connector.listen());
 // Receive messages from the user and respond by echoing each message back (prefixed with 'You said:')
 var userStore = [];
 var bot = new builder.UniversalBot(connector, function (session) {
-    // store user's address
-    var address = session.message.address;
-    userStore.push(address);
-
-    // end current dialog
-    session.beginDialog('greetings');
-
-
-
-    // bot.dialog('localePicker', [
-    //      function (session) {
-    //           var choices = [
-    //                { value: 'en', title: "English" },
-    //                { value: 'ksw', title: "Kiswahili" }
-    //           ];
-    //           builder.Prompts.choice(session, "Please select your preferred language.", choices);
-    //      },
-    //      function (session, results) {
-    //           var locale = results.response.entity;
-    //           session.preferredLocale(locale);
-    //           session.send("Language updated.").endDialog();
-    //      }
-    // ]);
-
+// try to shoot the welcome message as soon as you interact with the bot
+      session.beginDialog('greetings');
 });
+
 bot.dialog('greetings', [
-function (session) {
+  function (session) {
     builder.Prompts.text(session, 'Hi! What is your name?');
-},
-function (session, results) {
-    session.send(`Hello ${results.response}!, Welcome to ChapaRoute`);
-},
-// function (session, results) {
-//     session.userData.lang = results.response;
-//     session.choice(session, 'Choose/C ', ['English', 'Kiswahili']);
-// },
+  },
+  function (session, results) {
+      session.send(`Hello ${results.response}!, Welcome to ChapaRoute`);
+      // sesson.replaceDialogue('localePicker');
+  },
+]);
+
+bot.dialog('localePicker', [
+  function (session, args) {
+    welcome_subtitle = 'Choose language/Chagua lugha!';
+    menuOptions = [{ value: 'English', title: "en" }, {value: 'Kiswahili', title: "ksw" }];
+    builder.Prompts.choice(session, welcome_subtitle, menuOptions, {
+      listStyle: builder.ListStyle.button
+    });
+  },
+  function (session, results) {
+    var locale = results.response.entity;
+    session.preferredLocale(locale);
+    if (results.response.entity == 'English') {
+      session.send("Hurray! Language updated.");
+    } else {
+      session.send("Karibu sana!");
+    }
+  },
+]);
+
+var route = { //check if this is right
+ //Jimmy to help from here
+};
+
+bot.dialog('route', [
+  function (session, args) {
+    welcome_subtitle = 'Choose Option';
+    menuOptions = [{ value: '1) Pick Route?', title: "Pick_Route" }, {value: '2) Live Help', title: "Live_Help" }];
+    builder.Prompts.choice(session, welcome_subtitle, menuOptions, {
+      listStyle: builder.ListStyle.button
+    });
+  },
+  function (session, results) {
+    if (results.response.entity == '1) Pick Route?') {
+      session.send(`Please enter Destination`);
+      // pick query from the API  and establish possible routes
+    } else {
+      // still giving enter Destination prompt
+      session.send(`We are connecting you to our next agent. This may take a while, kindly hold...`);
+    }
+  },
 ]);
