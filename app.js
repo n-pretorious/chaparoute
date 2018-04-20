@@ -46,21 +46,27 @@ server.listen(process.env.port || process.env.PORT || 3978, async () => {
 });
 
 const apiToken =
-    "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBBNDU1OTA5OTQwQjJGQTQ5OEJGNTgyMzhBNkU3N0Y0MTFGM0NEOTIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJDa1ZaQ1pRTEw2U1l2MWdqaW01MzlCSHp6WkkifQ.eyJuYmYiOjE1MjQyMzc5MzcsImV4cCI6MTUyNDI0MTUzNywiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6ImQ0MmM4NDA1LTQ3YjgtNGUyOS1hZTczLTkyNjRiMzgwMjMyNiIsImNsaWVudF90ZW5hbnQiOiJkOTBlMjNiZi1jOWM1LTQzMjEtODAyNS0xNDNhNGFhYzBhNjQiLCJqdGkiOiI2NjNlNzY5ZWEzNzUyNTVlMzVmNTgwZGVhYTMyMGZhMSIsInNjb3BlIjpbInRyYW5zcG9ydGFwaTphbGwiXX0.AtZ4ceq5TAAzjUPb3vsDGGqBUCD3QlZWhgTuWr1xG6TOgE5jN32qvW4u_P63TqouctfW4EYEq23uJ4aAcNd1xlHQEYhR1Fn93sgw9ECQ9Tsuddm2Y6Nl859S46bYtCgPrJA5-GCIxkVkbM87YGIb3D5qhWDFHfg-7q7K0TPXNdQh431Nxx6K5OHiGvall-epOONRs_2vF5ao79Yy7dB0GDtBrMwjtSV9WAWBPDrQa7jfec5U24hEBBKu1PPiBPHGgmb946KHKIXOoqAxAq5k28hMmV3AeLwa_TytTTj6I9LjBQDwcm9NgoSP5i6f7HfmPriRbe5UTtTIimLv-CYBYA"
+    "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBBNDU1OTA5OTQwQjJGQTQ5OEJGNTgyMzhBNkU3N0Y0MTFGM0NEOTIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJDa1ZaQ1pRTEw2U1l2MWdqaW01MzlCSHp6WkkifQ.eyJuYmYiOjE1MjQyNjUyMTEsImV4cCI6MTUyNDI2ODgxMSwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6ImQ0MmM4NDA1LTQ3YjgtNGUyOS1hZTczLTkyNjRiMzgwMjMyNiIsImNsaWVudF90ZW5hbnQiOiJkOTBlMjNiZi1jOWM1LTQzMjEtODAyNS0xNDNhNGFhYzBhNjQiLCJqdGkiOiIxYmJkOWE4ODA5YzVkMzU2MmNmYmFkYTViY2U4MzQyMCIsInNjb3BlIjpbInRyYW5zcG9ydGFwaTphbGwiXX0.qH4VNopf7FhnMR8fLxFPbZ0S0sQJKJ-k7B1dtWDlj_GAQBqBsQcYbFfHPIxThUzg3jzNPML4H0MDJwjkXSJqXsso2k35bxQi2pefflNCIm9Bc5Jc3LCdRCflDtvO2kYQYXKWkUk0rFZrt1FvVglwtQSuO1IqrrFGloW5OgF4DPNt9FsvWNMR9NcRHnvP4JPd-BI46HD6l2GMaZXtcK-xBXUL1iHVkoUUhdycn7lh482MUISEq9lDzBGiZAWmaBuZYre73z2GLoY6h-tqd7pGs4kbI8OsoZL8UIQ9hm2dcrdKduqqo_1rRivKskJtms3kEV8GYhL3zQQ43EjTL7KiDA"
 
 const getCoordinates = async (location) => {
     return await geocoder.geocode(location)
 }
 
 // getCoordinates('test')
-// Create chat connector for communicating with the Bot Framework Service
+Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
-    appId: process.env.MicrosoftAppId,
-    appPassword: process.env.MicrosoftAppPassword
+    appId: "4641d403-baae-4f07-86fb-a3db56d0b95e",
+    appPassword: "wcaoKBCTN38{pfvSY749%%~"
 });
 
-// Listen for messages from users
+// export class ChatConnector implements IConnector, IBotStorage {
+//   appId:,
+//   appPassword:,
+// }
+
+Listen for messages from users
 server.post('/api/messages', connector.listen());
+// listen(): (req: any, res: any) => void;
 
 var userStore = [];
 var bot = new builder.UniversalBot(connector, async (session) => [
@@ -206,12 +212,29 @@ bot.dialog('visa', [
   function(session){
     welcome_subtitle = 'Tap to pay your transport with Visa';
     menuOptions = [{
-        value: 'Visa Pay',
+        value: 'visa_pay',
         title: "visa_pay"
     }];
     builder.Prompts.choice(session, welcome_subtitle, menuOptions, {
         listStyle: builder.ListStyle.button
     });
+    if (session.response == 'visa_pay'){
+
+    }
+    function createPaymentRequest() {
+  if (!fare) {
+    throw new Error('Fare amount is missing');
+  }
+  // PaymentMethodData[]
+  var paymentMethods = [{
+    supportedMethods: [payments.'visaleg'],
+    data: {
+      mode: process.env.PAYMENTS_LIVEMODE === 'true' ? null : 'TEST',
+      merchantId: process.env.PAYMENTS_MERCHANT_ID,
+      supportedNetworks: ['visa', 'mastercard'],
+      supportedTypes: ['credit']
+    }
+  }];
 },
   // function(session, results){
   //   response.result.entity == 'Visa Direct Pay'
