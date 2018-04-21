@@ -10,7 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.18.0",
+    "bootbot": "^1.0.14",
     "botbuilder": "^3.14.1",
-    "restify": "^7.1.0"
+    "node-geocoder": "^3.22.0",
+    "request": "^2.85.0",
+    "restify": "^7.1.0",
+    "randomstring": "^1.1.5"
   }
 }

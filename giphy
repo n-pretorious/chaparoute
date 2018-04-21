@@ -1,0 +1,23 @@
+'use strict';
+const BootBot = require('bootbot');
+const config = require('config');
+const fetch = require('node-fetch');
+const GIPHY_URL =
+
+const bot = new BootBot({
+    accessToken: config.get('access_token'),
+    verifyToken: config.get('verify-token'),
+    appSecret: config.get('app_secret'),
+});
+
+bot.hear(['hello','hi','hey'], (payload, chat) => {
+  chat.say('Hello There!');
+});
+
+bot.hear(/gif (.*)/i, (payload, chat, data) =>{
+  const query = data.match[1];
+  chat.say('Searching for the perfect gif...');
+  fetch
+});
+
+bot.start();

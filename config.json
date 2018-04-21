@@ -1,0 +1,12 @@
+{
+  "userId": "L6C2OLFXRNNEUAMMGAGU21wisz0gc_swjwas4inVPYgpVOU1Y",
+  "password": "mA0091621h6B0PJ2m47jTBClyBcTnUhMRhHRRwo",
+  "cert": "./cert.pem",
+  "key": "./privateKey.pem",
+  "mlcIssuerId" : "{put your enrollments api issuer id here}",
+  "mlcDeviceId" : "{put your enrollments api device id here}",
+  "mlcClientMessageID" : "{put your enrollments api client message id here}",
+  "mlcPrimaryAccountNumber" : "{put your enrollments api primary account number here}",
+  "mlcMessageId" : "{put your locations api message id here}",
+  "visaUrl": "https://sandbox.api.visa.com/"
+}

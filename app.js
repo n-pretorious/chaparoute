@@ -1,9 +1,12 @@
-var axios = require('axios');
+let axios = require('axios');
 var request = require('request');
 var restify = require('restify');
 var builder = require('botbuilder');
 var datetime = require('node-datetime');
 var NodeGeocoder = require('node-geocoder');
+var request = require('request');
+var VisaAPIClient = require('./visaapiclient.js');
+var randomstring = require('randomstring');
 
 
 var options = {
@@ -46,7 +49,7 @@ server.listen(process.env.port || process.env.PORT || 3978, async () => {
 });
 
 const apiToken =
-    "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBBNDU1OTA5OTQwQjJGQTQ5OEJGNTgyMzhBNkU3N0Y0MTFGM0NEOTIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJDa1ZaQ1pRTEw2U1l2MWdqaW01MzlCSHp6WkkifQ.eyJuYmYiOjE1MjQyNzMxNDgsImV4cCI6MTUyNDI3Njc0OCwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6ImZhN2I3ZWMxLTc4NDAtNDIwNi05MmNmLTc5Y2EyMTM5OWYzNiIsImNsaWVudF9jb3ZlcmFnZSI6Ikp1dW1maElKLUVDX3RyNDVDSmVqcnciLCJjbGllbnRfdGVuYW50IjoiMmJjYmJlYzItZmE5MC00M2QwLWFjMWMtN2E2ZmQ2NTZmNmY3IiwianRpIjoiZTdjNjVjMTk4NGYxZGNmNjhmY2FhYTNkYzZiOWI3YjYiLCJzY29wZSI6WyJ0cmFuc3BvcnRhcGk6YWxsIl19.KP5lIABZydyk-kl6UJ0fTmtbb9BzLGJfCfPLiiTW877MBtgd6k93PNU3w7bE7A_Kbj0g2JsmuOYm_018qXLm0f-kzQihDyhEYSj4AFtgEs-03BqIgHly23bunuxbP_acqUyvcFTFsNWSRjxqPBYs-EGP5z0Oxcc3s6lokg7F7tyRnfCX1aj9wSAwJJfDNOay8BVS88DdwLCUT5RQApCulwAnYmz6ZTVUhjZ6RrvbsjXEH6nOmDXKmAspmQcCHNE82WfvBUkbUJ7284vigaQlOS2_8UfdldPFml-fcYy8GJivSdwRrzUW-SuOYkryJ2H4aVtP4OyuaGLqM3q5v8qCZQ"
+    "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBBNDU1OTA5OTQwQjJGQTQ5OEJGNTgyMzhBNkU3N0Y0MTFGM0NEOTIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJDa1ZaQ1pRTEw2U1l2MWdqaW01MzlCSHp6WkkifQ.eyJuYmYiOjE1MjQzMTEzMzAsImV4cCI6MTUyNDMxNDkzMCwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6ImQ0MmM4NDA1LTQ3YjgtNGUyOS1hZTczLTkyNjRiMzgwMjMyNiIsImNsaWVudF90ZW5hbnQiOiJkOTBlMjNiZi1jOWM1LTQzMjEtODAyNS0xNDNhNGFhYzBhNjQiLCJqdGkiOiI3ZWJhNWUyMmFjNGNiYWE0MDgyOWZlYTRhMTgyZTQ4NCIsInNjb3BlIjpbInRyYW5zcG9ydGFwaTphbGwiXX0.Rwq86FkAA30lz0gv22z_s3tY9wRwFdh2ybRuVxZyBNrYNtaelkSpFnlcAet3KdM-qQWiOz_ef83mcvSCczNcKuLgn7cLafgHxr5ZKZcw_slZdQlQnBwYrW1lWgd8BZlSDpff1H9AoEmzs7YxdAMqxYzIjZswlWRQMsIpP_muswDhXdSvyN36RmgMWJJorplR48BRNuXh8K1ymNvs2Kfaraw6y6y2HvpODB7no0CeAeneqLTRC5QVc-AUy-UmnTIOjCKXqS3rhY8kfTMrsc1sJyIgWHpACAlrNB6bUIuznE3roVV6HNIdf89aNyz2RqLpppkzsKZ4b3cr8nUufViWvQ"
 
 const getCoordinates = async (location) => {
     return await geocoder.geocode(location)
@@ -55,8 +58,8 @@ const getCoordinates = async (location) => {
 // getCoordinates('test')
 // Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
-    appId: process.env.MicrosoftAppId,
-    appPassword: process.env.MicrosoftAppPassword
+    appId: "4641d403-baae-4f07-86fb-a3db56d0b95e",
+    appPassword: "wcaoKBCTN38{pfvSY749%%~"
 });
 
 // Listen for messages from users
@@ -145,7 +148,6 @@ bot.dialog('route', [
         }
     },
     async (session) => {
-        console.log(session.userData.trip)
         try {
             const response = await axios({
                 method: 'POST',
@@ -176,20 +178,19 @@ bot.dialog('route', [
                     let routes = ''
                     const legs = itinerary.legs
                     if (legs.length > 0) {
-                        console.log(legs)
                         legs.forEach(leg => {
-                            console.log(counter)
                             if (leg.type === 'Walking') {
                                 leg.directions.forEach(walk => {
                                     routes = routes + `${walk.instruction}\n`
                                 })
                             }
                             if (leg.type === 'Transit') {
-                                routes = routes + `Take a bus to ${leg.vehicle.headsign}, @ ${leg.fare.cost.amount}(${leg.fare.cost.currencyCode}). Duration: ${leg.duration}.\n`
-                                // date.format('hh:mm')
+                              // console.log(Object.keys(leg))
+                                routes = routes + `Take a bus to ${leg.vehicle.headsign}, Duration: ${leg.duration}.\n`
                             }
                         })
                     }
+                    console.log(routes)
                     const result = `Option ${counter}:` + `\n${routes}`
                     session.send(result)
                 })
@@ -197,24 +198,96 @@ bot.dialog('route', [
         } catch (error) {
             console.log(error.data)
         }
-        // session.beginDialog('visa')
+        session.beginDialog('visa')
     }
-
 ]);
 
 bot.dialog('visa', [
-  function(session){
-    welcome_subtitle = 'Tap to pay your transport with Visa';
-    menuOptions = [{
-        value: 'Visa Pay',
-        title: "visa_pay"
-    }];
-    builder.Prompts.choice(session, welcome_subtitle, menuOptions, {
-        listStyle: builder.ListStyle.button
-    });
-},
-  // function(session, results){
-  //   response.result.entity == 'Visa Direct Pay'
-  // },
+    function(session, args) {
+      welcome_subtitle = 'Tap to pay your transport with Visa';
+      menuOptions = [{
+          value: 'visa_pay',
+          title: "visa_pay"
+      }];
+      builder.Prompts.choice(session, welcome_subtitle, menuOptions, {
+          listStyle: builder.ListStyle.button
+      });
+    },
+    function(session, results) {
+        if (results.response.entity == 'visa_pay') {
+            builder.Prompts.text(session, `Enter account to send to`);
+        }
+    },
+    async (session, results, next) => {
+      if (results.response){
+        session.userData.account_no = results.response;
+        builder.Prompts.text(session, `Enter amount`);
+        next()
+      }
+    },
+    async (session, results, args, next) => {
+       session.userData.amount = results.response;
+       session.send(`Kindly confirm the account details, A/C NO:${session.userData.account_no}, Amount: ${session.dialogData.amount}`)
+       welcome_subtitle = 'Proceed';
+       menuOptions = [{
+           value: 'yes',
+           title: "yes"
+       },{
+         value:'no',
+         titel:'no',
+       }];
+       builder.Prompts.choice(session, welcome_subtitle, menuOptions, {
+           listStyle: builder.ListStyle.button
+       });
+       next()
+    },
+    function(session, results, args) {
+      if (results.response.entity == 'yes'){
+        var visaAPIClient = new VisaAPIClient();
+        var strDate = new Date().toISOString().replace(/\..+/, '');
+        var pushFundsRequest = JSON.stringify({
+            "systemsTraceAuditNumber": 792155,
+            "retrievalReferenceNumber": "330000550000",
+            "localTransactionDateTime": strDate,
+            "acquiringBin": 408972,
+            "acquirerCountryCode": "840",
+            "senderAccountNumber": session.userData.account_no,
+            "senderCountryCode": "KEN",
+            "transactionCurrencyCode": "KES",
+            "senderName": "John Smith",
+            "senderAddress": "44 Market St.",
+            "senderCity": "San Francisco",
+            "senderStateCode": "CA",
+            "recipientName": "Adam Smith",
+            "recipientPrimaryAccountNumber": "4761100090708271",
+            "amount": "200.00",
+            "businessApplicationId": "AA",
+            "transactionIdentifier": 381228649430011,
+            "merchantCategoryCode": 6012,
+            "sourceOfFundsCode": "03",
+            "cardAcceptor": {
+              "name": "Acceptor 2",
+              "terminalId": "13655392",
+              "idCode": "VMT200911026070",
+              "address": {
+                "country": "KEN",
+              }
+            },
+            "feeProgramIndicator": "123"
+          });
 
+        var baseUri = 'visadirect/';
+        var resourcePath = 'fundstransfer/v1/pushfundstransactions';
+        visaAPIClient.doMutualAuthRequest(baseUri + resourcePath, pushFundsRequest, 'POST', {},
+        function(err, responseBody) {
+         let response = ''
+          if(!err) {
+            response = `${JSON.parse(responseBody).transactionIdentifier}, transaction successfull`;
+            session.send(response)
+          } else {
+            console.log(err);
+          }
+        });
+      }
+    }
 ]);
