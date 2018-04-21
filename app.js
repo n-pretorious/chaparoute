@@ -46,32 +46,26 @@ server.listen(process.env.port || process.env.PORT || 3978, async () => {
 });
 
 const apiToken =
-    "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBBNDU1OTA5OTQwQjJGQTQ5OEJGNTgyMzhBNkU3N0Y0MTFGM0NEOTIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJDa1ZaQ1pRTEw2U1l2MWdqaW01MzlCSHp6WkkifQ.eyJuYmYiOjE1MjQyNjY1NTIsImV4cCI6MTUyNDI3MDE1MiwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6ImQ0MmM4NDA1LTQ3YjgtNGUyOS1hZTczLTkyNjRiMzgwMjMyNiIsImNsaWVudF90ZW5hbnQiOiJkOTBlMjNiZi1jOWM1LTQzMjEtODAyNS0xNDNhNGFhYzBhNjQiLCJqdGkiOiJhNWY4MDQyZmQ0YWE1MDc1OGZkYjQxMTJlYWFlNjFhMSIsInNjb3BlIjpbInRyYW5zcG9ydGFwaTphbGwiXX0.Wdmgos5fAsfie2pmkzOx3ULYfukmPYWFwaHDzdYIuJfmJrRWQBo1Kt2uDCpYd1Fh6R9UxEn-HLgQ-4JKBpdzQLGZvUbIe6CN9anHQV9Niv8ewYkkVa_9GwlvYmYJy1OeUW1nBRErAy9-PeQFQdyEXirCPjMQ1YukXakz-7UQBoKFAVJk_57B0BYix5FhUp1Ss4Tispn8mxre7-w1xDX9DqecJmtdkRAfR5QZuv3dWRx39s2oZaaXcZbfl297EJL8uoaEzKNA4cuyEUt1KZJEEhJa1YANKGJDHGG23s412d51SPNJVppKq-aNs2li67fdE4WrB1Iwckh1KMad5vPeRw"
+    "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBBNDU1OTA5OTQwQjJGQTQ5OEJGNTgyMzhBNkU3N0Y0MTFGM0NEOTIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJDa1ZaQ1pRTEw2U1l2MWdqaW01MzlCSHp6WkkifQ.eyJuYmYiOjE1MjQyNzMxNDgsImV4cCI6MTUyNDI3Njc0OCwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6ImZhN2I3ZWMxLTc4NDAtNDIwNi05MmNmLTc5Y2EyMTM5OWYzNiIsImNsaWVudF9jb3ZlcmFnZSI6Ikp1dW1maElKLUVDX3RyNDVDSmVqcnciLCJjbGllbnRfdGVuYW50IjoiMmJjYmJlYzItZmE5MC00M2QwLWFjMWMtN2E2ZmQ2NTZmNmY3IiwianRpIjoiZTdjNjVjMTk4NGYxZGNmNjhmY2FhYTNkYzZiOWI3YjYiLCJzY29wZSI6WyJ0cmFuc3BvcnRhcGk6YWxsIl19.KP5lIABZydyk-kl6UJ0fTmtbb9BzLGJfCfPLiiTW877MBtgd6k93PNU3w7bE7A_Kbj0g2JsmuOYm_018qXLm0f-kzQihDyhEYSj4AFtgEs-03BqIgHly23bunuxbP_acqUyvcFTFsNWSRjxqPBYs-EGP5z0Oxcc3s6lokg7F7tyRnfCX1aj9wSAwJJfDNOay8BVS88DdwLCUT5RQApCulwAnYmz6ZTVUhjZ6RrvbsjXEH6nOmDXKmAspmQcCHNE82WfvBUkbUJ7284vigaQlOS2_8UfdldPFml-fcYy8GJivSdwRrzUW-SuOYkryJ2H4aVtP4OyuaGLqM3q5v8qCZQ"
 
 const getCoordinates = async (location) => {
     return await geocoder.geocode(location)
 }
 
 // getCoordinates('test')
-Create chat connector for communicating with the Bot Framework Service
+// Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
-    appId: "4641d403-baae-4f07-86fb-a3db56d0b95e",
-    appPassword: "wcaoKBCTN38{pfvSY749%%~"
+    appId: process.env.MicrosoftAppId,
+    appPassword: process.env.MicrosoftAppPassword
 });
 
-// export class ChatConnector implements IConnector, IBotStorage {
-//   appId:,
-//   appPassword:,
-// }
-
-Listen for messages from users
+// Listen for messages from users
 server.post('/api/messages', connector.listen());
-// listen(): (req: any, res: any) => void;
 
 var userStore = [];
 var bot = new builder.UniversalBot(connector, async (session) => [
     // await login()
-    // session.beginDialog('route')
+    session.beginDialog('route')
 ]);
 
 bot.dialog('greetings', [
@@ -203,7 +197,7 @@ bot.dialog('route', [
         } catch (error) {
             console.log(error.data)
         }
-        session.beginDialog('visa')
+        // session.beginDialog('visa')
     }
 
 ]);
@@ -212,29 +206,12 @@ bot.dialog('visa', [
   function(session){
     welcome_subtitle = 'Tap to pay your transport with Visa';
     menuOptions = [{
-        value: 'visa_pay',
+        value: 'Visa Pay',
         title: "visa_pay"
     }];
     builder.Prompts.choice(session, welcome_subtitle, menuOptions, {
         listStyle: builder.ListStyle.button
     });
-    if (session.response == 'visa_pay'){
-
-    }
-    function createPaymentRequest() {
-  if (!fare) {
-    throw new Error('Fare amount is missing');
-  }
-  // PaymentMethodData[]
-  var paymentMethods = [{
-    supportedMethods: [payments.'visaleg'],
-    data: {
-      mode: process.env.PAYMENTS_LIVEMODE === 'true' ? null : 'TEST',
-      merchantId: process.env.PAYMENTS_MERCHANT_ID,
-      supportedNetworks: ['visa', 'mastercard'],
-      supportedTypes: ['credit']
-    }
-  }];
 },
   // function(session, results){
   //   response.result.entity == 'Visa Direct Pay'
