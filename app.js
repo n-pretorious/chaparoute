@@ -1,4 +1,4 @@
-let axios = require('axios');
+var axios = require('axios');
 var request = require('request');
 var restify = require('restify');
 var builder = require('botbuilder');
