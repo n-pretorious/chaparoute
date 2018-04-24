@@ -58,8 +58,8 @@ const getCoordinates = async (location) => {
 // getCoordinates('test')
 // Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
-    appId: "4641d403-baae-4f07-86fb-a3db56d0b95e",
-    appPassword: "wcaoKBCTN38{pfvSY749%%~"
+    appId: "a7133575-aebf-4f9f-8950-851555110ef9",
+    appPassword: "modEIB93?_$yedeGWYL364="
 });
 
 // Listen for messages from users
