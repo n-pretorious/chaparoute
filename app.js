@@ -49,7 +49,7 @@ server.listen(process.env.port || process.env.PORT || 3978, async () => {
 });
 
 const apiToken =
-    "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBBNDU1OTA5OTQwQjJGQTQ5OEJGNTgyMzhBNkU3N0Y0MTFGM0NEOTIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJDa1ZaQ1pRTEw2U1l2MWdqaW01MzlCSHp6WkkifQ.eyJuYmYiOjE1MjQzMTEzMzAsImV4cCI6MTUyNDMxNDkzMCwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6ImQ0MmM4NDA1LTQ3YjgtNGUyOS1hZTczLTkyNjRiMzgwMjMyNiIsImNsaWVudF90ZW5hbnQiOiJkOTBlMjNiZi1jOWM1LTQzMjEtODAyNS0xNDNhNGFhYzBhNjQiLCJqdGkiOiI3ZWJhNWUyMmFjNGNiYWE0MDgyOWZlYTRhMTgyZTQ4NCIsInNjb3BlIjpbInRyYW5zcG9ydGFwaTphbGwiXX0.Rwq86FkAA30lz0gv22z_s3tY9wRwFdh2ybRuVxZyBNrYNtaelkSpFnlcAet3KdM-qQWiOz_ef83mcvSCczNcKuLgn7cLafgHxr5ZKZcw_slZdQlQnBwYrW1lWgd8BZlSDpff1H9AoEmzs7YxdAMqxYzIjZswlWRQMsIpP_muswDhXdSvyN36RmgMWJJorplR48BRNuXh8K1ymNvs2Kfaraw6y6y2HvpODB7no0CeAeneqLTRC5QVc-AUy-UmnTIOjCKXqS3rhY8kfTMrsc1sJyIgWHpACAlrNB6bUIuznE3roVV6HNIdf89aNyz2RqLpppkzsKZ4b3cr8nUufViWvQ"
+    "eyJhbGciOiJSUzI1NiIsImtpZCI6IjBBNDU1OTA5OTQwQjJGQTQ5OEJGNTgyMzhBNkU3N0Y0MTFGM0NEOTIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJDa1ZaQ1pRTEw2U1l2MWdqaW01MzlCSHp6WkkifQ.eyJuYmYiOjE1MjQzMjAyNjgsImV4cCI6MTUyNDMyMzg2OCwiaXNzIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tIiwiYXVkIjoiaHR0cHM6Ly9pZGVudGl0eS53aGVyZWlzbXl0cmFuc3BvcnQuY29tL3Jlc291cmNlcyIsImNsaWVudF9pZCI6ImQ0MmM4NDA1LTQ3YjgtNGUyOS1hZTczLTkyNjRiMzgwMjMyNiIsImNsaWVudF90ZW5hbnQiOiJkOTBlMjNiZi1jOWM1LTQzMjEtODAyNS0xNDNhNGFhYzBhNjQiLCJqdGkiOiJhZWFmOTBhNzk2ZDBhODA0ZjQwM2U2OWQ1Y2M4YzBhYSIsInNjb3BlIjpbInRyYW5zcG9ydGFwaTphbGwiXX0.jVODNRrzY_j3pyss28jrNUQG1IA-C9CZD-oKswBSOiJQWaI7bL8x38zj9JJaloZ3npWWv0UZoADsjldJJl_4NnzmUpLln7mfJ3nK6DQ9GFE-9WH9L-thAI8NBO8Z4qXDIs7npMWUzqsW3vWzyUfHRgYY3DEoyArHwFV8xBY7VQ6J0_deO1soxeyEuZY_HWng3iVx5syHO7xwaAXgypG1ddWGuGvu-p4VLvAFDBSU-1vNgVSwGpQRF6IkoAaDYLrZpo6Q5Cx1o2e1DD1edCKn9LWK3l88zpTaCz5DQ9tJdoYKI6csUvn8u7Wedwf8bTHvKa8bQ_sbCj8nxaQNAgOs0w"
 
 const getCoordinates = async (location) => {
     return await geocoder.geocode(location)
@@ -58,8 +58,8 @@ const getCoordinates = async (location) => {
 // getCoordinates('test')
 // Create chat connector for communicating with the Bot Framework Service
 var connector = new builder.ChatConnector({
-    appId: "a7133575-aebf-4f9f-8950-851555110ef9",
-    appPassword: "modEIB93?_$yedeGWYL364="
+  appId: "a7133575-aebf-4f9f-8950-851555110ef9",
+  appPassword: "modEIB93?_$yedeGWYL364="
 });
 
 // Listen for messages from users
@@ -68,7 +68,7 @@ server.post('/api/messages', connector.listen());
 var userStore = [];
 var bot = new builder.UniversalBot(connector, async (session) => [
     // await login()
-    session.beginDialog('route')
+    session.beginDialog('greetings')
 ]);
 
 bot.dialog('greetings', [
@@ -227,7 +227,7 @@ bot.dialog('visa', [
     },
     async (session, results, args, next) => {
        session.userData.amount = results.response;
-       session.send(`Kindly confirm the account details, A/C NO:${session.userData.account_no}, Amount: ${session.dialogData.amount}`)
+       session.send(`Kindly confirm the account details, A/C NO:${session.userData.account_no}, Amount: ${session.userData.amount}`)
        welcome_subtitle = 'Proceed';
        menuOptions = [{
            value: 'yes',
